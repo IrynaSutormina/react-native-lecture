@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { ScrollView, Text } from "react-native";
 import { ThemedInput, ThemedButton } from "../../components";
+import {logIn, signUp} from '../../store/actions/auth/authActions';
+import {connect} from 'react-redux';
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation, logIn, signUp }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,7 +23,11 @@ const Login = ({ navigation }) => {
 
       <ThemedButton
         title="Login"
-        onPress={() => navigation.navigate("Dashboard")}
+        onPress={() => {logIn(email, password); navigation.navigate("Dashboard")}}
+      />
+      <ThemedButton
+        title="Sign up"
+        onPress={() => {signUp(email, password); navigation.navigate("Dashboard")}}
       />
     </ScrollView>
   );
@@ -30,5 +36,12 @@ const Login = ({ navigation }) => {
 Login.navigationOptions = {
   title: "Login"
 };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logIn: (email, password) => dispatch(logIn(email, password)),
+    signUp: (email, password) => dispatch(signUp(email, password)) 
+  }
+}
 
-export default Login;
+export default connect(null, mapDispatchToProps)(Login);
+//export default Login;
